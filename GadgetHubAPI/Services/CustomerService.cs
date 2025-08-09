@@ -15,4 +15,26 @@ public class CustomerService
         await _context.SaveChangesAsync();
         return customer;
     }
+
+    public async Task<Customer?> UpdateAsync(Customer customer)
+    {
+        var existing = await _context.Customers.FindAsync(customer.CustomerId);
+        if (existing == null) return null;
+
+        existing.FullName = customer.FullName;
+        existing.Email = customer.Email;
+
+        await _context.SaveChangesAsync();
+        return existing;
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var customer = await _context.Customers.FindAsync(id);
+        if (customer == null) return false;
+
+        _context.Customers.Remove(customer);
+        await _context.SaveChangesAsync();
+        return true;
+    }
 }

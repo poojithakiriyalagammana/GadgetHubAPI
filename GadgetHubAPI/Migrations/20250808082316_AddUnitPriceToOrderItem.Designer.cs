@@ -4,6 +4,7 @@ using GadgetHubAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GadgetHubAPI.Migrations
 {
     [DbContext(typeof(GadgetHubDbContext))]
-    partial class GadgetHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250808082316_AddUnitPriceToOrderItem")]
+    partial class AddUnitPriceToOrderItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,16 +158,11 @@ namespace GadgetHubAPI.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductId1")
-                        .HasColumnType("int");
-
                     b.HasKey("QuotationId");
 
                     b.HasIndex("DistributorId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("ProductId1");
 
                     b.ToTable("Quotations");
                 });
@@ -274,10 +271,6 @@ namespace GadgetHubAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GadgetHubAPI.Models.Product", null)
-                        .WithMany("Quotations")
-                        .HasForeignKey("ProductId1");
-
                     b.Navigation("Distributor");
 
                     b.Navigation("Product");
@@ -286,11 +279,6 @@ namespace GadgetHubAPI.Migrations
             modelBuilder.Entity("GadgetHubAPI.Models.Order", b =>
                 {
                     b.Navigation("OrderItems");
-                });
-
-            modelBuilder.Entity("GadgetHubAPI.Models.Product", b =>
-                {
-                    b.Navigation("Quotations");
                 });
 #pragma warning restore 612, 618
         }

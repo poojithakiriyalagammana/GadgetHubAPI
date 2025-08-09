@@ -53,5 +53,19 @@ namespace GadgetHubAPI.Services
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<Quotation?> UpdateAsync(Quotation quotation)
+        {
+            var existing = await _context.Quotations.FindAsync(quotation.QuotationId);
+            if (existing == null) return null;
+
+            existing.ProductId = quotation.ProductId;
+            existing.DistributorId = quotation.DistributorId;
+            existing.PricePerUnit = quotation.PricePerUnit;
+            existing.Availability = quotation.Availability;
+            existing.EstimatedDeliveryDays = quotation.EstimatedDeliveryDays;
+
+            await _context.SaveChangesAsync();
+            return existing;
+        }
     }
 }
