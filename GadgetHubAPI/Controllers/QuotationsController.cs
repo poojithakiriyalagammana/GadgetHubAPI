@@ -41,5 +41,14 @@ namespace GadgetHubAPI.Controllers
             var result = await _service.DeleteAsync(id);
             return result ? Ok() : NotFound();
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, Quotation quotation)
+        {
+            if (id != quotation.QuotationId)
+                return BadRequest("ID mismatch");
+
+            var updated = await _service.UpdateAsync(quotation);
+            return updated == null ? NotFound() : Ok(updated);
+        }
     }
 }

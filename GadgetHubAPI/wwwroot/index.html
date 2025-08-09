@@ -34,6 +34,7 @@
             margin-bottom: 30px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             text-align: center;
+            position: relative;
         }
 
             .header h1 {
@@ -366,6 +367,26 @@
                     <i class="fas fa-times"></i> Cancel
                 </button>
             </div>
+            <div id="edit-product-form" style="display: none;">
+                <h3>Edit Product</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Product Name</label>
+                        <input type="text" id="edit-product-name" placeholder="Enter product name">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="edit-product-description" placeholder="Enter product description" rows="3"></textarea>
+                    </div>
+                </div>
+                <input type="hidden" id="edit-product-id">
+                <button class="btn" onclick="updateProduct()">
+                    <i class="fas fa-save"></i> Update Product
+                </button>
+                <button class="btn btn-danger" onclick="hideEditProductForm()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
 
             <div id="products-loading" class="loading">
                 <div class="spinner"></div>Loading products...
@@ -394,6 +415,22 @@
                     <i class="fas fa-save"></i> Save Distributor
                 </button>
                 <button class="btn btn-danger" onclick="hideAddDistributorForm()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+            <div id="edit-distributor-form" style="display: none;">
+                <h3>Edit Distributor</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Distributor Name</label>
+                        <input type="text" id="edit-distributor-name" placeholder="Enter distributor name">
+                    </div>
+                </div>
+                <input type="hidden" id="edit-distributor-id">
+                <button class="btn" onclick="updateDistributor()">
+                    <i class="fas fa-save"></i> Update Distributor
+                </button>
+                <button class="btn btn-danger" onclick="hideEditDistributorForm()">
                     <i class="fas fa-times"></i> Cancel
                 </button>
             </div>
@@ -448,6 +485,42 @@
                     <i class="fas fa-times"></i> Cancel
                 </button>
             </div>
+            <div id="edit-quotation-form" style="display: none;">
+                <h3>Edit Quotation</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Product</label>
+                        <select id="edit-quotation-product">
+                            <option value="">Select Product</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Distributor</label>
+                        <select id="edit-quotation-distributor">
+                            <option value="">Select Distributor</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Price Per Unit</label>
+                        <input type="number" id="edit-quotation-price" step="0.01" placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label>Availability</label>
+                        <input type="number" id="edit-quotation-availability" placeholder="Stock quantity">
+                    </div>
+                    <div class="form-group">
+                        <label>Estimated Delivery Days</label>
+                        <input type="number" id="edit-quotation-delivery" placeholder="Days">
+                    </div>
+                </div>
+                <input type="hidden" id="edit-quotation-id">
+                <button class="btn" onclick="updateQuotation()">
+                    <i class="fas fa-save"></i> Update Quotation
+                </button>
+                <button class="btn btn-danger" onclick="hideEditQuotationForm()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
 
             <div id="quotations-loading" class="loading">
                 <div class="spinner"></div>Loading quotations...
@@ -483,6 +556,26 @@
                     <i class="fas fa-times"></i> Cancel
                 </button>
             </div>
+            <div id="edit-customer-form" style="display: none;">
+                <h3>Edit Customer</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="edit-customer-name" placeholder="Enter customer name">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="edit-customer-email" placeholder="Enter customer email">
+                    </div>
+                </div>
+                <input type="hidden" id="edit-customer-id">
+                <button class="btn" onclick="updateCustomer()">
+                    <i class="fas fa-save"></i> Update Customer
+                </button>
+                <button class="btn btn-danger" onclick="hideEditCustomerForm()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
 
             <div id="customers-loading" class="loading">
                 <div class="spinner"></div>Loading customers...
@@ -513,7 +606,29 @@
                         <input type="date" id="order-date">
                     </div>
                 </div>
-                <button class="btn" onclick="addOrder()">
+
+                <div id="order-items-container" class="order-item-form">
+                    <h4>Order Items</h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Product</label>
+                            <select id="order-item-product">
+                                <option value="">Select Product</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input type="number" id="order-item-quantity" min="1" value="1">
+                        </div>
+                    </div>
+                    <button type="button" class="btn" onclick="addOrderItem()">
+                        <i class="fas fa-plus"></i> Add Item
+                    </button>
+
+                    <div id="order-items-list" style="margin-top: 15px;"></div>
+                </div>
+
+                <button class="btn" onclick="submitOrder()">
                     <i class="fas fa-save"></i> Create Order
                 </button>
                 <button class="btn btn-danger" onclick="hideAddOrderForm()">
@@ -526,6 +641,7 @@
             </div>
             <div id="orders-list" class="data-grid"></div>
         </div>
+    </div>
     </div>
 
     <script>
@@ -541,11 +657,49 @@
 
         // Initialize app
         document.addEventListener('DOMContentLoaded', function () {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Add logout button to header
+            const header = document.querySelector('.header');
+            const logoutBtn = document.createElement('button');
+            logoutBtn.className = 'btn btn-danger';
+            logoutBtn.style.position = 'absolute';
+            logoutBtn.style.top = '20px';
+            logoutBtn.style.right = '20px';
+            logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
+            logoutBtn.onclick = function () {
+                localStorage.removeItem('token');
+                window.location.href = 'login.html';
+            };
+            header.appendChild(logoutBtn);
+
             initializeTabs();
             loadProducts();
-
-            // Set default order date to today
             document.getElementById('order-date').valueAsDate = new Date();
+        });
+
+        // Configure axios to send token with all requests
+        axios.interceptors.request.use(config => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+            return config;
+        }, error => {
+            return Promise.reject(error);
+        });
+
+        // Handle unauthorized errors globally
+        axios.interceptors.response.use(response => response, error => {
+            if (error.response?.status === 401) {
+                localStorage.removeItem('token');
+                window.location.href = 'login.html';
+            }
+            return Promise.reject(error);
         });
 
         // Tab management
@@ -589,7 +743,7 @@
         // Utility functions
         function showAlert(message, type = 'success') {
             const alert = document.createElement('div');
-            alert.className = `alert alert-${type}`;
+            alert.className = `alert alert-${type === 'error' ? 'error' : 'success'}`;
             alert.textContent = message;
 
             const container = document.querySelector('.tab-content.active');
@@ -599,10 +753,13 @@
         }
 
         function formatDate(dateString) {
-            return new Date(dateString).toLocaleDateString();
+            if (!dateString) return 'N/A';
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
         }
 
         function formatCurrency(amount) {
+            if (amount === undefined || amount === null) return 'N/A';
             return new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: 'USD'
@@ -618,8 +775,9 @@
                 const response = await axios.get(`${API_BASE}/products`);
                 products = response.data;
                 displayProducts();
+                updateProductDropdown();
             } catch (error) {
-                showAlert('Error loading products: ' + error.message, 'error');
+                showAlert('Error loading products: ' + (error.response?.data?.message || error.message), 'error');
             } finally {
                 document.getElementById('products-loading').style.display = 'none';
             }
@@ -629,21 +787,31 @@
             const container = document.getElementById('products-list');
             container.innerHTML = '';
 
+            if (products.length === 0) {
+                container.innerHTML = '<p>No products found</p>';
+                return;
+            }
+
             products.forEach(product => {
                 const card = document.createElement('div');
                 card.className = 'data-card';
                 card.innerHTML = `
-                                    <div class="card-header">
-                                        <h3 class="card-title">${product.name}</h3>
-                                        <button class="btn btn-danger" onclick="deleteProduct(${product.productId})">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                    <div class="card-content">
-                                        <p><strong>ID:</strong> ${product.productId}</p>
-                                        <p><strong>Description:</strong> ${product.description}</p>
-                                    </div>
-                                `;
+                    <div class="card-header">
+                        <h3 class="card-title">${product.name || 'N/A'}</h3>
+                        <div>
+                            <button class="btn" onclick="showEditProductForm(${product.productId})" style="margin-right: 10px;">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteProduct(${product.productId})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>ID:</strong> ${product.productId || 'N/A'}</p>
+                        <p><strong>Description:</strong> ${product.description || 'N/A'}</p>
+                    </div>
+                `;
                 container.appendChild(card);
             });
         }
@@ -683,7 +851,9 @@
                 hideAddProductForm();
                 loadProducts();
             } catch (error) {
-                const errorMsg = error.response?.data?.errors?.Product?.[0] || error.message;
+                const errorMsg = error.response?.data?.errors?.Product?.[0] ||
+                    error.response?.data?.message ||
+                    error.message;
                 showAlert('Error adding product: ' + errorMsg, 'error');
             }
         }
@@ -696,7 +866,7 @@
                 showAlert('Product deleted successfully!');
                 loadProducts();
             } catch (error) {
-                showAlert('Error deleting product: ' + error.message, 'error');
+                showAlert('Error deleting product: ' + (error.response?.data?.message || error.message), 'error');
             }
         }
 
@@ -711,7 +881,7 @@
                 displayDistributors();
                 updateDistributorDropdown();
             } catch (error) {
-                showAlert('Error loading distributors: ' + error.message, 'error');
+                showAlert('Error loading distributors: ' + (error.response?.data?.message || error.message), 'error');
             } finally {
                 document.getElementById('distributors-loading').style.display = 'none';
             }
@@ -721,20 +891,30 @@
             const container = document.getElementById('distributors-list');
             container.innerHTML = '';
 
+            if (distributors.length === 0) {
+                container.innerHTML = '<p>No distributors found</p>';
+                return;
+            }
+
             distributors.forEach(distributor => {
                 const card = document.createElement('div');
                 card.className = 'data-card';
                 card.innerHTML = `
-                                    <div class="card-header">
-                                        <h3 class="card-title">${distributor.name}</h3>
-                                        <button class="btn btn-danger" onclick="deleteDistributor(${distributor.distributorId})">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                    <div class="card-content">
-                                        <p><strong>ID:</strong> ${distributor.distributorId}</p>
-                                    </div>
-                                `;
+                    <div class="card-header">
+                        <h3 class="card-title">${distributor.name || 'N/A'}</h3>
+                        <div>
+                            <button class="btn" onclick="showEditDistributorForm(${distributor.distributorId})" style="margin-right: 10px;">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteDistributor(${distributor.distributorId})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>ID:</strong> ${distributor.distributorId || 'N/A'}</p>
+                    </div>
+                `;
                 container.appendChild(card);
             });
         }
@@ -766,7 +946,9 @@
                 hideAddDistributorForm();
                 loadDistributors();
             } catch (error) {
-                const errorMsg = error.response?.data?.errors?.Distributor?.[0] || error.message;
+                const errorMsg = error.response?.data?.errors?.Distributor?.[0] ||
+                    error.response?.data?.message ||
+                    error.message;
                 showAlert('Error adding distributor: ' + errorMsg, 'error');
             }
         }
@@ -779,7 +961,7 @@
                 showAlert('Distributor deleted successfully!');
                 loadDistributors();
             } catch (error) {
-                showAlert('Error deleting distributor: ' + error.message, 'error');
+                showAlert('Error deleting distributor: ' + (error.response?.data?.message || error.message), 'error');
             }
         }
 
@@ -795,7 +977,7 @@
                 updateProductDropdown();
                 updateDistributorDropdown();
             } catch (error) {
-                showAlert('Error loading quotations: ' + error.message, 'error');
+                showAlert('Error loading quotations: ' + (error.response?.data?.message || error.message), 'error');
             } finally {
                 document.getElementById('quotations-loading').style.display = 'none';
             }
@@ -805,24 +987,34 @@
             const container = document.getElementById('quotations-list');
             container.innerHTML = '';
 
+            if (quotations.length === 0) {
+                container.innerHTML = '<p>No quotations found</p>';
+                return;
+            }
+
             quotations.forEach(quotation => {
                 const card = document.createElement('div');
                 card.className = 'data-card';
                 card.innerHTML = `
-                <div class="card-header">
-                    <h3 class="card-title">${quotation.product?.name || 'Unknown Product'}</h3>
-                    <button class="btn btn-danger" onclick="deleteQuotation(${quotation.quotationId})">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-                <div class="card-content">
-                    <p><strong>ID:</strong> ${quotation.quotationId}</p>
-                    <p><strong>Distributor:</strong> ${quotation.distributor?.name || 'Unknown'}</p>
-                    <p><strong>Price:</strong> ${formatCurrency(quotation.pricePerUnit)}</p>
-                    <p><strong>Availability:</strong> ${quotation.availability} units</p>
-                    <p><strong>Delivery:</strong> ${quotation.estimatedDeliveryDays} days</p>
-                </div>
-            `;
+                    <div class="card-header">
+                        <h3 class="card-title">${quotation.product?.name || 'Unknown Product'}</h3>
+                        <div>
+                            <button class="btn" onclick="showEditQuotationForm(${quotation.quotationId})" style="margin-right: 10px;">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteQuotation(${quotation.quotationId})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>ID:</strong> ${quotation.quotationId || 'N/A'}</p>
+                        <p><strong>Distributor:</strong> ${quotation.distributor?.name || 'Unknown'}</p>
+                        <p><strong>Price:</strong> ${formatCurrency(quotation.pricePerUnit)}</p>
+                        <p><strong>Availability:</strong> ${quotation.availability || 0} units</p>
+                        <p><strong>Delivery:</strong> ${quotation.estimatedDeliveryDays || 0} days</p>
+                    </div>
+                `;
                 container.appendChild(card);
             });
         }
@@ -865,7 +1057,11 @@
                 hideAddQuotationForm();
                 loadQuotations();
             } catch (error) {
-                showAlert('Error adding quotation: ' + error.message, 'error');
+                const errorMsg = error.response?.data?.errors?.ProductId?.[0] ||
+                    error.response?.data?.errors?.DistributorId?.[0] ||
+                    error.response?.data?.message ||
+                    error.message;
+                showAlert('Error adding quotation: ' + errorMsg, 'error');
             }
         }
 
@@ -877,9 +1073,10 @@
                 showAlert('Quotation deleted successfully!');
                 loadQuotations();
             } catch (error) {
-                showAlert('Error deleting quotation: ' + error.message, 'error');
+                showAlert('Error deleting quotation: ' + (error.response?.data?.message || error.message), 'error');
             }
         }
+
         // Customers Management
         async function loadCustomers() {
             document.getElementById('customers-loading').style.display = 'block';
@@ -891,7 +1088,7 @@
                 displayCustomers();
                 updateCustomerDropdown();
             } catch (error) {
-                showAlert('Error loading customers: ' + error.message, 'error');
+                showAlert('Error loading customers: ' + (error.response?.data?.message || error.message), 'error');
             } finally {
                 document.getElementById('customers-loading').style.display = 'none';
             }
@@ -901,21 +1098,31 @@
             const container = document.getElementById('customers-list');
             container.innerHTML = '';
 
+            if (customers.length === 0) {
+                container.innerHTML = '<p>No customers found</p>';
+                return;
+            }
+
             customers.forEach(customer => {
                 const card = document.createElement('div');
                 card.className = 'data-card';
                 card.innerHTML = `
-                        <div class="card-header">
-                            <h3 class="card-title">${customer.fullName}</h3>
+                    <div class="card-header">
+                        <h3 class="card-title">${customer.fullName || 'N/A'}</h3>
+                        <div>
+                            <button class="btn" onclick="showEditCustomerForm(${customer.customerId})" style="margin-right: 10px;">
+                                <i class="fas fa-edit"></i>
+                            </button>
                             <button class="btn btn-danger" onclick="deleteCustomer(${customer.customerId})">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
-                        <div class="card-content">
-                            <p><strong>ID:</strong> ${customer.customerId}</p>
-                            <p><strong>Email:</strong> ${customer.email}</p>
-                        </div>
-                    `;
+                    </div>
+                    <div class="card-content">
+                        <p><strong>ID:</strong> ${customer.customerId || 'N/A'}</p>
+                        <p><strong>Email:</strong> ${customer.email || 'N/A'}</p>
+                    </div>
+                `;
                 container.appendChild(card);
             });
         }
@@ -955,7 +1162,10 @@
                 hideAddCustomerForm();
                 loadCustomers();
             } catch (error) {
-                const errorMsg = error.response?.data?.errors?.Customer?.[0] || error.message;
+                const errorMsg = error.response?.data?.errors?.FullName?.[0] ||
+                    error.response?.data?.errors?.Email?.[0] ||
+                    error.response?.data?.message ||
+                    error.message;
                 showAlert('Error adding customer: ' + errorMsg, 'error');
             }
         }
@@ -968,7 +1178,7 @@
                 showAlert('Customer deleted successfully!');
                 loadCustomers();
             } catch (error) {
-                showAlert('Error deleting customer: ' + error.message, 'error');
+                showAlert('Error deleting customer: ' + (error.response?.data?.message || error.message), 'error');
             }
         }
 
@@ -983,7 +1193,7 @@
                 displayOrders();
                 updateCustomerDropdown();
             } catch (error) {
-                showAlert('Error loading orders: ' + error.message, 'error');
+                showAlert('Error loading orders: ' + (error.response?.data?.message || error.message), 'error');
             } finally {
                 document.getElementById('orders-loading').style.display = 'none';
             }
@@ -992,6 +1202,11 @@
         function displayOrders() {
             const container = document.getElementById('orders-list');
             container.innerHTML = '';
+
+            if (orders.length === 0) {
+                container.innerHTML = '<p>No orders found</p>';
+                return;
+            }
 
             orders.forEach(order => {
                 const card = document.createElement('div');
@@ -1002,74 +1217,158 @@
                     orderItemsHtml = '<div class="order-items"><h4>Order Items</h4>';
                     order.orderItems.forEach(item => {
                         orderItemsHtml += `
-                                <div class="order-item">
-                                    <span>${item.product?.name || 'Unknown Product'}</span>
-                                    <span>Qty: ${item.quantity}</span>
-                                </div>
-                            `;
+                                    <div class="order-item">
+                                        <span>${item.product?.name || 'Unknown Product'}</span>
+                                        <span>Qty: ${item.quantity}</span>
+                                        </div>
+                                    `;
                     });
                     orderItemsHtml += '</div>';
                 }
 
                 card.innerHTML = `
-                        <div class="card-header">
-                            <h3 class="card-title">Order #${order.orderId}</h3>
-                            <button class="btn btn-danger" onclick="deleteOrder(${order.orderId})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                        <div class="card-content">
-                            <p><strong>Customer:</strong> ${order.customer?.fullName || 'Unknown'}</p>
-                            <p><strong>Date:</strong> ${formatDate(order.orderDate)}</p>
-                            ${orderItemsHtml}
-                        </div>
-                    `;
+                                <div class="card-header">
+                                    <h3 class="card-title">Order #${order.orderId}</h3>
+                                    <button class="btn btn-danger" onclick="deleteOrder(${order.orderId})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                <div class="card-content">
+                                    <p><strong>Customer:</strong> ${order.customer?.fullName || 'Unknown'}</p>
+                                    <p><strong>Date:</strong> ${formatDate(order.orderDate)}</p>
+                                    ${orderItemsHtml}
+                                </div>
+                            `;
                 container.appendChild(card);
             });
         }
-
         function showAddOrderForm() {
             document.getElementById('add-order-form').style.display = 'block';
+            document.getElementById('order-items-list').innerHTML = '';
+            orderItems = [];
+            updateProductDropdownForOrder();
         }
 
         function hideAddOrderForm() {
             document.getElementById('add-order-form').style.display = 'none';
             document.getElementById('order-customer').value = '';
             document.getElementById('order-date').valueAsDate = new Date();
+            document.getElementById('order-items-list').innerHTML = '';
+            orderItems = [];
         }
 
-        async function addOrder() {
+        let orderItems = [];
+
+        function addOrderItem() {
+            const productId = document.getElementById('order-item-product').value;
+            const quantity = document.getElementById('order-item-quantity').value;
+
+            if (!productId || !quantity) {
+                showAlert('Please select a product and enter quantity', 'error');
+                return;
+            }
+
+            const product = products.find(p => p.productId == productId);
+            if (!product) return;
+
+            // Find the latest quotation for this product
+            const productQuotations = quotations.filter(q => q.productId == productId);
+            if (productQuotations.length === 0) {
+                showAlert('No price information available for this product', 'error');
+                return;
+            }
+
+            // Get the latest quotation (assuming higher ID means newer)
+            const latestQuotation = productQuotations.reduce((prev, current) => 
+                (prev.quotationId > current.quotationId) ? prev : current
+            );
+
+            // Check if item already exists
+            const existingItem = orderItems.find(item => item.productId == productId);
+            if (existingItem) {
+                existingItem.quantity += parseInt(quantity);
+            } else {
+                orderItems.push({
+                    productId: parseInt(productId),
+                    quantity: parseInt(quantity),
+                    productName: product.name,
+                    unitPrice: latestQuotation.pricePerUnit
+                });
+            }
+
+            updateOrderItemsList();
+
+            // Reset form
+            document.getElementById('order-item-product').value = '';
+            document.getElementById('order-item-quantity').value = '1';
+        }
+
+
+        function updateOrderItemsList() {
+            const container = document.getElementById('order-items-list');
+            container.innerHTML = '';
+
+            if (orderItems.length === 0) {
+                container.innerHTML = '<p>No items added</p>';
+                return;
+            }
+
+            orderItems.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'order-item';
+                itemDiv.innerHTML = `
+                    <span>${item.productName}</span>
+                    <span>Qty: ${item.quantity}</span>
+                    <span>Price: ${formatCurrency(item.unitPrice)}</span>
+                    <span>Total: ${formatCurrency(item.unitPrice * item.quantity)}</span>
+                    <button class="btn btn-danger" style="padding: 5px 10px;" onclick="removeOrderItem(${index})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                container.appendChild(itemDiv);
+            });
+        }
+        function removeOrderItem(index) {
+            orderItems.splice(index, 1);
+            updateOrderItemsList();
+        }
+        async function submitOrder() {
             const customerId = document.getElementById('order-customer').value;
             const orderDate = document.getElementById('order-date').value;
 
             if (!customerId) {
                 showAlert('Customer selection is required', 'error');
-                document.getElementById('order-customer').focus();
                 return;
             }
             if (!orderDate) {
                 showAlert('Order date is required', 'error');
-                document.getElementById('order-date').focus();
+                return;
+            }
+            if (orderItems.length === 0) {
+                showAlert('Please add at least one item to the order', 'error');
                 return;
             }
 
             try {
-                const response = await axios.post(`${API_BASE}/orders`, {
-                    CustomerId: parseInt(customerId),
-                    OrderDate: orderDate,
-                    OrderItems: [] 
-                });
+                const orderData = {
+                    customerId: parseInt(customerId),
+                    orderDate: orderDate,
+                    orderItems: orderItems.map(item => ({
+                        productId: item.productId,
+                        quantity: item.quantity
+                        // Note: We're not sending unitPrice - backend will determine it
+                    }))
+                };
 
+                const response = await axios.post(`${API_BASE}/orders`, orderData);
                 showAlert('Order created successfully!');
                 hideAddOrderForm();
                 loadOrders();
             } catch (error) {
-                const errorMsg = error.response?.data?.errors?.Customer?.[0] ||
-                    error.response?.data?.errors?.OrderItems?.[0] ||
-                    error.message;
-                showAlert('Error creating order: ' + errorMsg, 'error');
+                showAlert('Error creating order: ' + (error.response?.data?.message || error.message), 'error');
             }
         }
+
 
         async function deleteOrder(id) {
             if (!confirm('Are you sure you want to delete this order?')) return;
@@ -1082,10 +1381,21 @@
                 showAlert('Error deleting order: ' + error.message, 'error');
             }
         }
+        function updateProductDropdown() {
+            const quotationDropdown = document.getElementById('quotation-product');
+            quotationDropdown.innerHTML = '<option value="">Select Product</option>';
+
+            products.forEach(product => {
+                const option = document.createElement('option');
+                option.value = product.productId;
+                option.textContent = product.name;
+                quotationDropdown.appendChild(option);
+            });
+        }
 
         // Dropdown management functions
-        function updateProductDropdown() {
-            const dropdown = document.getElementById('quotation-product');
+        function updateProductDropdownForOrder() {
+            const dropdown = document.getElementById('order-item-product');
             dropdown.innerHTML = '<option value="">Select Product</option>';
 
             products.forEach(product => {
@@ -1118,6 +1428,228 @@
                 option.textContent = customer.fullName;
                 dropdown.appendChild(option);
             });
+
+        }
+        function showEditProductForm(productId) {
+            const product = products.find(p => p.productId == productId);
+            if (!product) {
+                showAlert('Product not found', 'error');
+                return;
+            }
+
+            // Hide add form if visible
+            document.getElementById('add-product-form').style.display = 'none';
+            
+            // Populate form
+            document.getElementById('edit-product-id').value = product.productId;
+            document.getElementById('edit-product-name').value = product.name || '';
+            document.getElementById('edit-product-description').value = product.description || '';
+            
+            // Show form
+            document.getElementById('edit-product-form').style.display = 'block';
+        }
+
+        function hideEditProductForm() {
+            document.getElementById('edit-product-form').style.display = 'none';
+        }
+
+        async function updateProduct() {
+            const id = document.getElementById('edit-product-id').value;
+            const name = document.getElementById('edit-product-name').value.trim();
+            const description = document.getElementById('edit-product-description').value.trim();
+
+            if (!name || !description) {
+                showAlert('All fields are required', 'error');
+                return;
+            }
+
+            try {
+                await axios.put(`${API_BASE}/products/${id}`, {
+                    ProductId: parseInt(id),
+                    Name: name,
+                    Description: description
+                });
+
+                showAlert('Product updated successfully!');
+                hideEditProductForm();
+                loadProducts();
+            } catch (error) {
+                showAlert('Error updating product: ' + (error.response?.data?.message || error.message), 'error');
+            }
+        }
+
+        // Distributor Edit Functions
+        function showEditDistributorForm(distributorId) {
+            const distributor = distributors.find(d => d.distributorId === distributorId);
+            if (!distributor) return;
+
+            document.getElementById('edit-distributor-id').value = distributor.distributorId;
+            document.getElementById('edit-distributor-name').value = distributor.name || '';
+            document.getElementById('edit-distributor-form').style.display = 'block';
+        }
+
+        function hideEditDistributorForm() {
+            document.getElementById('edit-distributor-form').style.display = 'none';
+        }
+        async function updateProduct() {
+            const id = document.getElementById('edit-product-id').value;
+            const name = document.getElementById('edit-product-name').value.trim();
+            const description = document.getElementById('edit-product-description').value.trim();
+
+            if (!name || !description) {
+                showAlert('All fields are required', 'error');
+                return;
+            }
+
+            try {
+                await axios.put(`${API_BASE}/products/${id}`, {
+                    ProductId: parseInt(id),
+                    Name: name,
+                    Description: description
+                });
+
+                showAlert('Product updated successfully!');
+                hideEditProductForm();
+                loadProducts();
+            } catch (error) {
+                showAlert('Error updating product: ' + (error.response?.data?.message || error.message), 'error');
+            }
+        }
+        async function updateDistributor() {
+            const id = document.getElementById('edit-distributor-id').value;
+            const name = document.getElementById('edit-distributor-name').value.trim();
+
+            if (!name) {
+                showAlert('Distributor name is required', 'error');
+                return;
+            }
+
+            try {
+                await axios.put(`${API_BASE}/distributors/${id}`, {
+                    DistributorId: parseInt(id),
+                    Name: name
+                });
+
+                showAlert('Distributor updated successfully!');
+                hideEditDistributorForm();
+                loadDistributors();
+            } catch (error) {
+                showAlert('Error updating distributor: ' + (error.response?.data?.message || error.message), 'error');
+            }
+        }
+
+        // Quotation Edit Functions
+        function showEditQuotationForm(quotationId) {
+            const quotation = quotations.find(q => q.quotationId === quotationId);
+            if (!quotation) return;
+
+            // Populate edit dropdowns
+            updateEditQuotationDropdowns();
+
+            document.getElementById('edit-quotation-id').value = quotation.quotationId;
+            document.getElementById('edit-quotation-product').value = quotation.productId;
+            document.getElementById('edit-quotation-distributor').value = quotation.distributorId;
+            document.getElementById('edit-quotation-price').value = quotation.pricePerUnit;
+            document.getElementById('edit-quotation-availability').value = quotation.availability;
+            document.getElementById('edit-quotation-delivery').value = quotation.estimatedDeliveryDays;
+            document.getElementById('edit-quotation-form').style.display = 'block';
+        }
+
+        function hideEditQuotationForm() {
+            document.getElementById('edit-quotation-form').style.display = 'none';
+        }
+
+        function updateEditQuotationDropdowns() {
+            // Update product dropdown for edit form
+            const productDropdown = document.getElementById('edit-quotation-product');
+            productDropdown.innerHTML = '<option value="">Select Product</option>';
+            products.forEach(product => {
+                const option = document.createElement('option');
+                option.value = product.productId;
+                option.textContent = product.name;
+                productDropdown.appendChild(option);
+            });
+
+            // Update distributor dropdown for edit form
+            const distributorDropdown = document.getElementById('edit-quotation-distributor');
+            distributorDropdown.innerHTML = '<option value="">Select Distributor</option>';
+            distributors.forEach(distributor => {
+                const option = document.createElement('option');
+                option.value = distributor.distributorId;
+                option.textContent = distributor.name;
+                distributorDropdown.appendChild(option);
+            });
+        }
+
+        async function updateQuotation() {
+            const id = document.getElementById('edit-quotation-id').value;
+            const productId = document.getElementById('edit-quotation-product').value;
+            const distributorId = document.getElementById('edit-quotation-distributor').value;
+            const price = document.getElementById('edit-quotation-price').value;
+            const availability = document.getElementById('edit-quotation-availability').value;
+            const deliveryDays = document.getElementById('edit-quotation-delivery').value;
+
+            if (!productId || !distributorId || !price || !availability || !deliveryDays) {
+                showAlert('Please fill in all fields', 'error');
+                return;
+            }
+
+            try {
+                await axios.put(`${API_BASE}/quotations/${id}`, {
+                    QuotationId: parseInt(id),
+                    ProductId: parseInt(productId),
+                    DistributorId: parseInt(distributorId),
+                    PricePerUnit: parseFloat(price),
+                    Availability: parseInt(availability),
+                    EstimatedDeliveryDays: parseInt(deliveryDays)
+                });
+
+                showAlert('Quotation updated successfully!');
+                hideEditQuotationForm();
+                loadQuotations();
+            } catch (error) {
+                showAlert('Error updating quotation: ' + (error.response?.data?.message || error.message), 'error');
+            }
+        }
+
+        // Customer Edit Functions
+        function showEditCustomerForm(customerId) {
+            const customer = customers.find(c => c.customerId === customerId);
+            if (!customer) return;
+
+            document.getElementById('edit-customer-id').value = customer.customerId;
+            document.getElementById('edit-customer-name').value = customer.fullName || '';
+            document.getElementById('edit-customer-email').value = customer.email || '';
+            document.getElementById('edit-customer-form').style.display = 'block';
+        }
+
+        function hideEditCustomerForm() {
+            document.getElementById('edit-customer-form').style.display = 'none';
+        }
+
+        async function updateCustomer() {
+            const id = document.getElementById('edit-customer-id').value;
+            const name = document.getElementById('edit-customer-name').value.trim();
+            const email = document.getElementById('edit-customer-email').value.trim();
+
+            if (!name || !email) {
+                showAlert('All fields are required', 'error');
+                return;
+            }
+
+            try {
+                await axios.put(`${API_BASE}/customers/${id}`, {
+                    CustomerId: parseInt(id),
+                    FullName: name,
+                    Email: email
+                });
+
+                showAlert('Customer updated successfully!');
+                hideEditCustomerForm();
+                loadCustomers();
+            } catch (error) {
+                showAlert('Error updating customer: ' + (error.response?.data?.message || error.message), 'error');
+            }
         }
     </script>
 </body>

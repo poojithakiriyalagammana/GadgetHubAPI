@@ -33,5 +33,15 @@ namespace GadgetHubAPI.Services
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<Distributor?> UpdateAsync(Distributor distributor)
+        {
+            var existing = await _context.Distributors.FindAsync(distributor.DistributorId);
+            if (existing == null) return null;
+
+            existing.Name = distributor.Name;
+
+            await _context.SaveChangesAsync();
+            return existing;
+        }
     }
 }

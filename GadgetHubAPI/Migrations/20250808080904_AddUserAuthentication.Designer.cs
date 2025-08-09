@@ -4,6 +4,7 @@ using GadgetHubAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GadgetHubAPI.Migrations
 {
     [DbContext(typeof(GadgetHubDbContext))]
-    partial class GadgetHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250808080904_AddUserAuthentication")]
+    partial class AddUserAuthentication
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,9 +74,7 @@ namespace GadgetHubAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("OrderDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("OrderId");
 
@@ -99,9 +99,6 @@ namespace GadgetHubAPI.Migrations
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("OrderItemId");
 
@@ -156,16 +153,11 @@ namespace GadgetHubAPI.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductId1")
-                        .HasColumnType("int");
-
                     b.HasKey("QuotationId");
 
                     b.HasIndex("DistributorId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("ProductId1");
 
                     b.ToTable("Quotations");
                 });
@@ -235,7 +227,7 @@ namespace GadgetHubAPI.Migrations
                     b.HasOne("GadgetHubAPI.Models.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Customer");
@@ -252,7 +244,7 @@ namespace GadgetHubAPI.Migrations
                     b.HasOne("GadgetHubAPI.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Order");
@@ -274,10 +266,6 @@ namespace GadgetHubAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GadgetHubAPI.Models.Product", null)
-                        .WithMany("Quotations")
-                        .HasForeignKey("ProductId1");
-
                     b.Navigation("Distributor");
 
                     b.Navigation("Product");
@@ -286,11 +274,6 @@ namespace GadgetHubAPI.Migrations
             modelBuilder.Entity("GadgetHubAPI.Models.Order", b =>
                 {
                     b.Navigation("OrderItems");
-                });
-
-            modelBuilder.Entity("GadgetHubAPI.Models.Product", b =>
-                {
-                    b.Navigation("Quotations");
                 });
 #pragma warning restore 612, 618
         }
